@@ -1,50 +1,238 @@
-body {
-    font-family: Helvetica, sans-serif;
-    color: #EAE8FF;
-    background: #2D3142;
-    padding: 0 40px;
-    text-align: center;
+@layer base, layout;
+
+.highlight:nth-child(2) { /* = Select the element with the class .highlight that is also the 2nd child */
+	outline: 0.3rem dashed lightgreen;
+	outline-offset: 0.7rem;
 }
 
-nav {
-    margin: 40px auto 0 auto;
-    width: 250px;
-    border-radius: 50px;
-    background: #212431;
+:nth-child(2 of .highlight) { /* = Select the 2nd child element that has the class .highlight applied to it */
+	outline: 0.3rem dashed hotpink;
+	outline-offset: 0.7rem;
 }
 
-nav ul {
-    display: flex;
-    justify-content: space-evenly;
-    margin: 0;
-    padding: 0;
+@layer layout {
+	html, body {
+		background: #333;
+		color: #fff;
+		text-align: center;
+	}
+	
+	body {
+		font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+	}
+	
+	main {
+		max-width: 37rem;
+		margin: 0 auto 3rem;
+	}
+	
+	footer {
+		font-style: italic;
+	}
+	
+	footer a {
+		color: silver;
+	}
+
+	.albums {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+		gap: 5rem 2rem;
+		margin: 2rem 0;
+	}
+
+	.albums li {
+		position: relative;
+		transition: scale 0.2s ease-in-out;
+	}
+
+	.albums li:hover {
+		scale: 1.1;
+	}
+
+	.albums li.sale {
+		--color: 255 0 0;
+	}
+	.albums li.highlight {
+		--color: 255 215 0;
+	}
+
+	.albums li.sale::before,
+	.albums li.highlight::before {
+		padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+		position: absolute;
+		top: 1rem;
+		right: -0.5rem;
+		display: block;
+		z-index: 2;
+		height: 1.5rem;
+		line-height: 1.5rem;
+	}
+
+	.albums li.sale::after,
+	.albums li.highlight::after {
+		content: '';
+		position: absolute;
+		top: 2.25rem;
+		right: -0.5rem;
+		display: block;
+		width: 0rem;
+		height: 0rem;
+		border-top: 0.5rem solid transparent;
+		border-bottom: 0.5rem solid transparent;
+		border-left: 0.5rem solid rgb(var(--color) / 0.6);
+		z-index: 1;
+	}
+
+	.albums li.highlight::before {
+		content: 'Staff Pick';
+		background: rgb(var(--color));
+		color: black;
+	}
+
+	.albums li.sale::before {
+		content: 'Sale';
+		background: rgb(var(--color));
+		color: white;
+	}
+
+	.albums li img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+
+		-webkit-box-reflect: below 0.1rem
+				linear-gradient(rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0.25));
+	}
 }
 
-nav ul li {
-    list-style-type: none;
-    margin: 0;
-}
 
-nav ul li a {
-    display: inline-block;
-    padding: 20px;
-    color: #EAE8FF;
-    text-decoration: none;
-    font-size: 1.2em;
-}
+/* Non-demo styles below */
+@layer base {
+	@layer reset {
+		* {
+			box-sizing: border-box;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		html, body {
+			min-height: 100%;
+		}
+		ul[class], ul[class] > li {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+	}
+	@layer layout {
+		html {
+/* 			max-width: 84ch; */
+			padding: 3rem 2rem;
+			margin: auto;
+			line-height: 1.5;
+			font-size: 1.25rem;
+		}
 
-h1 {
-    font-size: 8em;
-    letter-spacing: -2px;
-}
+		a,
+		a:visited {
+			color: blue;
+		}
+		
 
-h1 strong {
-    background: rgb(34,193,195);
-    background: linear-gradient(45deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+		summary {
+			cursor: pointer;
+		}
 
-img.about {
-    opacity: 0.5;
+		dd + dt {
+			margin-top: 0.5em;
+		}
+
+		button {
+			cursor: pointer;
+		}
+	}
+	
+	@layer code {
+		pre {
+			border: 1px solid #dedede;
+			padding: 1em;
+			background: #f7f7f7;
+			font-family: "Courier 10 Pitch", Courier, monospace;
+			overflow-x: auto;
+			border-left: 0.4em solid cornflowerblue;
+			tab-size: 4;
+		}
+		
+		code:not(:is(pre, .no-support, .has-support) code), output:not(code:has(output) output) {
+			background: #f7f7f7;
+			border: 1px solid rgb(0 0 0 / 0.2);
+			padding: 0.1rem 0.3rem;
+			margin: 0.1rem 0;
+			border-radius: 0.2rem;
+			display: inline-block;
+		}
+	}
+
+	@layer support {
+		.no-support,
+		.has-support {
+			margin: 1em 0;
+			padding: 1em;
+			border: 1px solid #ccc;
+		}
+
+		.no-support {
+			background-color: #ff00002b;
+			display: block;
+		}
+		.no-support[data-level="warn"] {
+			background-color: #ffff002b;
+		}
+		.has-support {
+			background-color: #00ff002b;
+			display: none;
+		}
+		:is(.has-support, .no-support) > :first-child {
+			margin-top: 0;
+		}
+		:is(.has-support, .no-support) > :last-child {
+			margin-bottom: 0;
+		}
+		
+		@property --supports-at-property {
+			syntax: "*";
+			initial-value: 0;
+			inherits: true;
+		}
+		.no-support[data-support="at-property"], [data-no-support="at-property"] {
+			--value-when-supported: var(--supports-at-property) none;
+			--value-when-not-supported: block;
+			display: var(--value-when-supported, var(--value-when-not-supported));
+		}
+		.has-support[data-support="at-property"], [data-has-support="at-property"] {
+			--value-when-supported: var(--supports-at-property) block;
+			--value-when-not-supported: none;
+			display: var(--value-when-supported, var(--value-when-not-supported));
+		}
+
+		@supports (transform: scaleX(cos(360deg))) {
+			.no-support[data-support="css-trig-fns"] {
+				display: none;
+			}
+			.has-support[data-support="css-trig-fns"] {
+				display: block;
+			}
+		}
+
+		@supports selector(:nth-child(1 of *)) {
+			.no-support[data-support="selector-nth-of-s"] {
+				display: none;
+			}
+			.has-support[data-support="selector-nth-of-s"] {
+				display: block;
+			}
+		}
+	}
 }
